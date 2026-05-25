@@ -1,6 +1,6 @@
 # Organizador de Tarefas
 
-Aplicação web desenvolvida em Java com Spring Boot para cadastrar, acompanhar e priorizar tarefas de estudo ou trabalho. O projeto foi pensado para demonstrar, de forma prática, o uso de estruturas de dados, API REST, CRUD e persistência com banco de dados.
+Aplicação web desenvolvida em Java com Spring Boot para cadastrar, acompanhar e priorizar tarefas de uma equipe. A solução reúne uma interface simples para uso diário e uma API REST para integração com outros sistemas.
 
 ## Recursos principais
 
@@ -10,7 +10,7 @@ Aplicação web desenvolvida em Java com Spring Boot para cadastrar, acompanhar 
 - Persistência com Spring Data JPA e banco H2.
 - Filtros por status e busca textual.
 - Painel com indicadores e fila de prioridade.
-- Dados iniciais para facilitar a avaliação.
+- Dados iniciais para demonstrar o fluxo da aplicação.
 
 ## Estruturas de dados usadas
 
@@ -58,13 +58,13 @@ Content-Type: application/json
 
 ```json
 {
-  "titulo": "Revisar documentação",
-  "descricao": "Conferir README e observações antes de publicar no GitHub.",
-  "responsavel": "Divan",
+  "titulo": "Preparar reunião semanal",
+  "descricao": "Revisar pendências da equipe e separar os próximos encaminhamentos.",
+  "responsavel": "Mariana",
   "status": "PENDENTE",
   "prioridade": "ALTA",
   "prazo": "2026-06-05",
-  "tags": ["github", "documentacao"]
+  "tags": ["planejamento", "reuniao"]
 }
 ```
 
@@ -79,9 +79,9 @@ Endpoints disponíveis:
 - `GET /api/tarefas/resumo`
 - `GET /api/tarefas/fila`
 
-## Observações para avaliação
+## Documentação técnica
 
-As observações de implementação estão em português no arquivo [docs/OBSERVACOES.md](docs/OBSERVACOES.md). Elas explicam onde cada critério da tarefa foi atendido e quais decisões foram tomadas no projeto.
+A documentação técnica está em português no arquivo [docs/DOCUMENTACAO_TECNICA.md](docs/DOCUMENTACAO_TECNICA.md). Ela resume a arquitetura, as principais estruturas de dados e as decisões de implementação.
 
 ## Testes
 

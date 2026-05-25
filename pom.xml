@@ -8,12 +8,12 @@
 		<version>3.5.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>br.com.coursera</groupId>
+	<groupId>br.com.divan</groupId>
 	<artifactId>organizador-tarefas</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Organizador de Tarefas</name>
 	<description>Aplicação web para organizar tarefas com Spring Boot</description>
-	<url>https://github.com/</url>
+	<url>https://github.com/Divinha2023</url>
 	<licenses>
 		<license>
 			<name>MIT</name>
@@ -21,7 +21,7 @@
 	</licenses>
 	<developers>
 		<developer>
-			<name>Projeto Final Coursera</name>
+			<name>Divanildo Simões</name>
 		</developer>
 	</developers>
 	<scm>
