@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Organizador de Tarefas</title>
+	<link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+	<header class="topo">
+		<div>
+			<p class="rotulo">Projeto Final Coursera</p>
+			<h1>Organizador de Tarefas</h1>
+			<p class="subtitulo">Prioridades, prazos e responsáveis.</p>
+		</div>
+		<a class="botao botao-primario" th:href="@{/tarefas/nova}">+ Nova tarefa</a>
+	</header>
+
+	<main class="container">
+		<div class="mensagem" th:if="${mensagem}" th:text="${mensagem}"></div>
+
+		<section class="metricas" aria-label="Resumo das tarefas">
+			<article class="metrica">
+				<span>Total</span>
+				<strong th:text="${resumo.total()}">0</strong>
+			</article>
+			<article class="metrica" th:each="status : ${statusDisponiveis}">
+				<span th:text="${status.descricao}">Status</span>
+				<strong th:text="${resumo.tarefasPorStatus().get(status)}">0</strong>
+			</article>
+		</section>
+
+		<section class="painel">
+			<div class="conteudo-principal">
+				<form class="filtros" method="get" th:action="@{/tarefas}">
+					<label>
+						Buscar
+						<input type="search" name="termo" th:value="${termo}" placeholder="Título, responsável ou etiqueta">
+					</label>
+					<label>
+						Status
+						<select name="status">
+							<option value="">Todos</option>
+							<option th:each="opcao : ${statusDisponiveis}"
+									th:value="${opcao}"
+									th:text="${opcao.descricao}"
+									th:selected="${opcao == statusSelecionado}">Pendente</option>
+						</select>
+					</label>
+					<div class="grupo-botoes">
+						<button class="botao botao-secundario" type="submit">Filtrar</button>
+						<a class="botao botao-link" th:href="@{/tarefas}">Limpar</a>
+					</div>
+				</form>
+
+				<div class="tabela-wrap">
+					<table>
+						<thead>
+							<tr>
+								<th>Tarefa</th>
+								<th>Responsável</th>
+								<th>Prioridade</th>
+								<th>Status</th>
+								<th>Prazo</th>
+								<th>Ações</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:if="${#lists.isEmpty(tarefas)}">
+								<td colspan="6" class="vazio">Nenhuma tarefa encontrada.</td>
+							</tr>
+							<tr th:each="tarefa : ${tarefas}">
+								<td>
+									<strong th:text="${tarefa.titulo}">Título</strong>
+									<p th:text="${tarefa.descricao}">Descrição</p>
+									<div class="tags" th:if="${!#sets.isEmpty(tarefa.tags)}">
+										<span th:each="tag : ${tarefa.tags}" th:text="${tag}">tag</span>
+									</div>
+								</td>
+								<td th:text="${tarefa.responsavel}">Responsável</td>
+								<td>
+									<span th:class="'badge prioridade-' + ${#strings.toLowerCase(tarefa.prioridade.name())}"
+										  th:text="${tarefa.prioridade.descricao}">Alta</span>
+								</td>
+								<td>
+									<form method="post" th:action="@{/tarefas/{id}/status(id=${tarefa.id})}">
+										<select class="select-status" name="status" onchange="this.form.submit()">
+											<option th:each="opcao : ${statusDisponiveis}"
+													th:value="${opcao}"
+													th:text="${opcao.descricao}"
+													th:selected="${opcao == tarefa.status}">Pendente</option>
+										</select>
+									</form>
+								</td>
+								<td>
+									<span th:class="${tarefa.atrasada} ? 'prazo atrasado' : 'prazo'"
+										  th:text="${tarefa.prazo != null ? #temporals.format(tarefa.prazo, 'dd/MM/yyyy') : 'Sem prazo'}">01/06/2026</span>
+								</td>
+								<td class="acoes">
+									<a class="botao botao-link" th:href="@{/tarefas/{id}/editar(id=${tarefa.id})}">Editar</a>
+									<form method="post" th:action="@{/tarefas/{id}/excluir(id=${tarefa.id})}">
+										<button class="botao botao-perigo" type="submit" onclick="return confirm('Remover esta tarefa?')">Excluir</button>
+									</form>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<aside class="lateral">
+				<section class="bloco">
+					<h2>Fila de prioridade</h2>
+					<ol class="fila">
+						<li th:if="${#lists.isEmpty(resumo.proximasDaFila())}">Sem tarefas pendentes.</li>
+						<li th:each="item : ${resumo.proximasDaFila()}">
+							<strong th:text="${item.titulo()}">Tarefa</strong>
+							<span th:text="${item.prioridade().descricao}">Prioridade</span>
+						</li>
+					</ol>
+				</section>
+
+				<section class="bloco">
+					<h2>Etiquetas</h2>
+					<div class="tags tags-grandes">
+						<span th:if="${#sets.isEmpty(resumo.etiquetas())}">Sem etiquetas</span>
+						<span th:each="tag : ${resumo.etiquetas()}" th:text="${tag}">tag</span>
+					</div>
+				</section>
+
+				<section class="bloco">
+					<h2>Responsáveis</h2>
+					<ul class="responsaveis">
+						<li th:if="${#maps.isEmpty(resumo.tarefasPorResponsavel())}">Nenhum responsável cadastrado.</li>
+						<li th:each="item : ${resumo.tarefasPorResponsavel()}">
+							<span th:text="${item.key}">Nome</span>
+							<strong th:text="${item.value}">0</strong>
+						</li>
+					</ul>
+				</section>
+			</aside>
+		</section>
+	</main>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title th:text="${tituloPagina}">Tarefa</title>
+	<link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+	<header class="topo topo-compacto">
+		<div>
+			<p class="rotulo">Organizador de Tarefas</p>
+			<h1 th:text="${tituloPagina}">Nova tarefa</h1>
+		</div>
+		<a class="botao botao-secundario claro" th:href="@{/tarefas}">Voltar</a>
+	</header>
+
+	<main class="container container-estreito">
+		<form class="formulario"
+			  method="post"
+			  th:object="${formulario}"
+			  th:action="${modoEdicao} ? @{/tarefas/{id}(id=${tarefaId})} : @{/tarefas}">
+			<label>
+				Título
+				<input type="text" th:field="*{titulo}" maxlength="90" required>
+				<span class="erro" th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}">Erro</span>
+			</label>
+
+			<label>
+				Descrição
+				<textarea th:field="*{descricao}" rows="5" maxlength="500" required></textarea>
+				<span class="erro" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}">Erro</span>
+			</label>
+
+			<div class="grade-form">
+				<label>
+					Responsável
+					<input type="text" th:field="*{responsavel}" maxlength="80" required>
+					<span class="erro" th:if="${#fields.hasErrors('responsavel')}" th:errors="*{responsavel}">Erro</span>
+				</label>
+
+				<label>
+					Prazo
+					<input type="date" th:field="*{prazo}">
+				</label>
+			</div>
+
+			<div class="grade-form">
+				<label>
+					Prioridade
+					<select th:field="*{prioridade}">
+						<option th:each="prioridade : ${prioridades}"
+								th:value="${prioridade}"
+								th:text="${prioridade.descricao}">Média</option>
+					</select>
+				</label>
+
+				<label>
+					Status
+					<select th:field="*{status}">
+						<option th:each="status : ${statusDisponiveis}"
+								th:value="${status}"
+								th:text="${status.descricao}">Pendente</option>
+					</select>
+				</label>
+			</div>
+
+			<label>
+				Etiquetas
+				<input type="text" th:field="*{tags}" placeholder="spring, api, documentação">
+			</label>
+
+			<div class="grupo-botoes fim">
+				<button class="botao botao-primario" type="submit">Salvar</button>
+				<a class="botao botao-link" th:href="@{/tarefas}">Cancelar</a>
+			</div>
+		</form>
+	</main>
+</body>
+</html>
